@@ -1,0 +1,9 @@
+[package]
+name = "salus"
+version = "0.1.0"
+authors = [
+  "Elbert Lin <el168@stanford.edu>",
+  "Kevin Chen <kvchen@stanford.edu>",
+]
+
+[dependencies]
