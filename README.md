@@ -1,2 +1,3 @@
-# salus-demo
-demo binary for using Salus
+# Salus
+
+Yet another graph library for Rust.
