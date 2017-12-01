@@ -1,8 +1,8 @@
 use graph::Graph;
 use graph::Edge;
-use std::collections::{HashMap};
-use std::collections::hash_map::Keys;
+use std::collections::HashMap;
 
+#[derive(Debug)]
 pub struct AdjListGraph<TNode, TEdge> {
     cur_node_idx: i64,
     cur_edge_idx: i64,
@@ -43,11 +43,7 @@ impl<TNode, TEdge> Graph<TNode, TEdge> for AdjListGraph<TNode, TEdge> {
         let edge_idx = self.cur_edge_idx;
         self.cur_edge_idx += 1;
 
-        let new_edge = Edge {
-            data: data,
-            start: start_node,
-            end: end_node,
-        };
+        let new_edge: Edge<TEdge, i64> = Edge::new(data, start_node, end_node);
 
         self.edges.insert(edge_idx, new_edge);
         self.nodes.get_mut(&start_node).unwrap().1.push(edge_idx);
@@ -66,12 +62,12 @@ impl<TNode, TEdge> Graph<TNode, TEdge> for AdjListGraph<TNode, TEdge> {
         self.nodes.len()
     }
 
-    fn nodes(&self) -> Iterator<Item = &Self::TIndex> {
-        self.nodes.keys()
+    fn nodes<'a>(&'a self) -> Box<Iterator<Item = &'a Self::TIndex> + 'a> {
+        Box::new(self.nodes.keys())
     }
 
-    fn edges(&self) -> Iterator<Item = &Self::TIndex> {
-        self.edges.keys()
+    fn edges<'a>(&'a self) -> Box<Iterator<Item = &'a Self::TIndex> + 'a> {
+        Box::new(self.edges.keys())
     }
 
     fn has_node(&self, node: i64) -> bool {

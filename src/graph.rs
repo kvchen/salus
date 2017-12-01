@@ -8,6 +8,24 @@ pub struct Edge<TEdge, TIndex> {
     end: TIndex,
 }
 
+impl<TEdge, TIndex> Edge<TEdge, TIndex> {
+    pub fn new(data: TEdge, start: TIndex, end: TIndex) -> Edge<TEdge, TIndex> {
+        Edge {
+            data: data,
+            start: start,
+            end: end,
+        }
+    }
+
+    pub fn start(&self) -> &TIndex {
+        &self.start
+    }
+
+    pub fn end(&self) -> &TIndex {
+        &self.end
+    }
+}
+
 
 pub trait Graph<TNode, TEdge> {
     type TIndex;
@@ -35,10 +53,10 @@ pub trait Graph<TNode, TEdge> {
     fn order(&self) -> usize;
 
     // Returns an iterator over all the graph nodes.
-    fn nodes(&self) -> Iterator<Item = &Self::TIndex>;
+    fn nodes<'a>(&'a self) -> Box<Iterator<Item = &'a Self::TIndex> + 'a>;
 
     // Returns an iterator over all the graph edges.
-    fn edges(&self) -> Iterator<Item = &Self::TIndex>;
+    fn edges<'a>(&'a self) -> Box<Iterator<Item = &'a Self::TIndex> + 'a>;
 
     // Returns true if graph contains the node, else false
     fn has_node(&self, node: Self::TIndex) -> bool;
