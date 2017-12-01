@@ -51,8 +51,8 @@ impl<TNode, TEdge> Graph<TNode, TEdge> for AdjListGraph<TNode, TEdge> {
         unimplemented!();
     }
 
-    fn order(&self) -> i64 {
-        unimplemented!();
+    fn order(&self) -> usize {
+        self.nodes.len()
     }
 
     fn nodes(&self) -> Keys<i64, TNode> {

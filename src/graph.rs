@@ -17,7 +17,7 @@ pub trait Graph<TNode, TEdge> {
     // ACCESSORS
 
     // Returns the total number of nodes in the graph.
-    fn order(&self) -> i64;
+    fn order(&self) -> usize;
 
     // Returns an iterator over all the graph nodes.
     fn nodes(&self) -> impl Iterator<Item = &Self::TIndex>;
