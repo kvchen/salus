@@ -33,7 +33,7 @@ impl<TNode, TEdge> Graph<TNode, TEdge> for AdjListGraph<TNode, TEdge> {
         n
     }
 
-    fn remove_node(&mut self, data: TNode) -> Option<TNode> {
+    fn remove_node(&mut self, node: i64) -> Option<TNode> {
         unimplemented!();
     }
 
@@ -47,7 +47,11 @@ impl<TNode, TEdge> Graph<TNode, TEdge> for AdjListGraph<TNode, TEdge> {
         n
     }
 
-    fn remove_edge(&mut self, node_a: i64, node_b: i64) -> Option<TEdge> {
+    fn remove_edge(&mut self, edge: i64) -> Option<TEdge> {
+        unimplemented!();
+    }
+
+    fn remove_edge_between(&mut self, node_a: i64, node_b: i64) -> Option<TEdge> {
         unimplemented!();
     }
 
@@ -59,8 +63,28 @@ impl<TNode, TEdge> Graph<TNode, TEdge> for AdjListGraph<TNode, TEdge> {
         self.nodes.keys()
     }
 
+    fn edges(&self) -> Keys<i64, TEdge> {
+        self.edges_data.keys()
+    }
+
+    fn has_node(&self, node: i64) -> bool {
+        self.nodes.contains_key(&node)
+    }
+
     fn get_node_data(&self, node: i64) -> Option<&TNode> {
         self.nodes.get(&node)
+    }
+
+    fn has_edge(&self, edge: i64) -> bool {
+        self.edges_data.contains_key(&edge)
+    }
+
+    fn has_edge_between(&self, node_a: i64, node_b: i64) -> bool {
+        unimplemented!();
+    }
+
+    fn get_edge(&self, node_a: i64, node_b: i64) -> Option<&i64> {
+        unimplemented!();
     }
 
     fn get_edge_data(&self, edge: i64) -> Option<&TEdge> {
