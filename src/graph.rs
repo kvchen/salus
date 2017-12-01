@@ -1,5 +1,17 @@
+#[derive(Debug)]
+pub struct Edge<TEdge, TIndex> {
+    // Associated data for this edge
+    pub data: TEdge,
+
+    // Start and end nodes for this edge
+    start: TIndex,
+    end: TIndex,
+}
+
+
 pub trait Graph<TNode, TEdge> {
     type TIndex;
+
     // MUTATORS
 
     // Adds a single node to the graph and returns its corresponding index.
@@ -32,7 +44,7 @@ pub trait Graph<TNode, TEdge> {
     fn has_node(&self, node: Self::TIndex) -> bool;
 
     // Returns the data contained in a node.
-    fn get_node_data(&self, node: Self::TIndex) -> Option<&TNode>;
+    fn get_node_data(&self, node: Self::TIndex) -> Option<&(TNode, Vec<Self::TIndex>)>;
 
     // Returns true if graph contains the edge, else false
     fn has_edge(&self, edge: Self::TIndex) -> bool;
@@ -44,5 +56,5 @@ pub trait Graph<TNode, TEdge> {
     fn get_edge(&self, node_a: Self::TIndex, node_b: Self::TIndex) -> Option<&Self::TIndex>;
 
     // Returns the associated metadata with an edge between two nodes a and b.
-    fn get_edge_data(&self, edge: Self::TIndex) -> Option<&TEdge>;
+    fn get_edge_data(&self, edge: Self::TIndex) -> Option<&Edge<TEdge, i64>>;
 }
