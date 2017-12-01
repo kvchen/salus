@@ -17,6 +17,9 @@ pub trait Graph<TNode, TEdge> {
     // Removes an edge between nodes a and b and returns its associated value.
     fn remove_edge_between(&mut self, node_a: Self::TIndex, node_b: Self::TIndex) -> Option<TEdge>;
 
+    // Removes all nodes and edges from the graph.
+    // fn clear(&mut self);
+
     // ACCESSORS
 
     // Returns the total number of nodes in the graph.
@@ -42,6 +45,12 @@ pub trait Graph<TNode, TEdge> {
 
     // Returns the edge between two nodes
     fn get_edge(&self, node_a: Self::TIndex, node_b: Self::TIndex) -> Option<&Self::TIndex>;
+
+    // Returns an iterator over all edges incident on a node.
+    // fn get_edges_of(&self, node: Self::TIndex) -> Iterator<Item = &Self::TIndex>;
+
+    // Returns the source node of an edge.
+    // fn get_edge_source(&self, edge: Self::TIndex) ->
 
     // Returns the associated metadata with an edge between two nodes a and b.
     fn get_edge_data(&self, edge: Self::TIndex) -> Option<&TEdge>;
