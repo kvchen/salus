@@ -1,14 +1,14 @@
 mod graph;
 mod adjlistgraph;
 
-use std::io::BufReader;
+use std::io::{BufRead, BufReader};
 use std::fs::File;
 
 use graph::Graph;
 
 
 // source: filepath to twitter data eg. "path/to/twitter_rv.net"
-fn make_twitter_graph<G: Graph<u32, i32>>(source: &str, &mut graph: G) {
+fn make_twitter_graph<G: Graph<u32, i32>>(source: &str, graph: &mut G) {
     let reader = BufReader::new(File::open(source).unwrap());
 
     for readline in reader.lines() {
