@@ -87,6 +87,62 @@ impl<TNode, TEdge> AdjListGraph<TNode, TEdge> {
             edges: HashMap::new(),
         }
     }
+
+    // Returns the indegree (i.e. number of incoming edges) of a node.
+    fn get_indegree_of(&self, node: i64) -> Option<usize> {
+        if let Some(n) = self.nodes.get(&node) {
+            Some(n.pred.len())
+        } else {
+            None
+        }
+    }
+
+    // Returns the outdegree (i.e. number of outgoing edges) of a node.
+    fn get_outdegree_of(&self, node: i64) -> Option<usize> {
+        if let Some(n) = self.nodes.get(&node) {
+            Some(n.succ.len())
+        } else {
+            None
+        }
+    }
+
+    // Returns the start node of an edge.
+    fn get_edge_start(&self, edge: i64) -> Option<&i64> {
+        if let Some(e) = self.edges.get(&edge) {
+            Some(&e.start)
+        } else {
+            None
+        }
+    }
+
+    // Returns the end node of an edge.
+    fn get_edge_end(&self, edge: i64) -> Option<&i64> {
+        if let Some(e) = self.edges.get(&edge) {
+            Some(&e.end)
+        } else {
+            None
+        }
+    }
+
+    // Returns an iterator over all incoming edges of a node.
+    fn get_pred_edges_of<'a>(&'a self, node: i64) ->
+                            Box<Iterator<Item = &'a i64> + 'a> {
+        if let Some(n) = self.nodes.get(&node) {
+            Box::new(n.pred.iter())
+        } else {
+            Box::new(::std::iter::empty())
+        }
+    }
+
+    // Returns an iterator over all outgoing edges of a node.
+    fn get_succ_edges_of<'a>(&'a self, node: i64) ->
+                            Box<Iterator<Item = &'a i64> + 'a> {
+        if let Some(n) = self.nodes.get(&node) {
+            Box::new(n.succ.iter())
+        } else {
+            Box::new(::std::iter::empty())
+        }
+    }
 }
 
 impl<TNode, TEdge> Graph<TNode, TEdge> for AdjListGraph<TNode, TEdge> {
@@ -171,6 +227,10 @@ impl<TNode, TEdge> Graph<TNode, TEdge> for AdjListGraph<TNode, TEdge> {
         self.nodes.len()
     }
 
+    fn size(&self) -> usize {
+        self.edges.len()
+    }
+
     fn has_node(&self, node: Self::TIndex) -> bool {
         self.nodes.contains_key(&node)
     }
@@ -211,17 +271,17 @@ impl<TNode, TEdge> Graph<TNode, TEdge> for AdjListGraph<TNode, TEdge> {
         None
     }
 
-    fn get_edge_start(&self, edge: Self::TIndex) -> Option<&Self::TIndex> {
+    fn get_nodes_of(&self, edge: Self::TIndex) -> Option<(&Self::TIndex, &Self::TIndex)> {
         if let Some(e) = self.edges.get(&edge) {
-            Some(&e.start)
+            Some((&e.start, &e.end))
         } else {
             None
         }
     }
 
-    fn get_edge_end(&self, edge: Self::TIndex) -> Option<&Self::TIndex> {
-        if let Some(e) = self.edges.get(&edge) {
-            Some(&e.end)
+    fn get_degree_of(&self, node: Self::TIndex) -> Option<usize> {
+        if let Some(n) = self.nodes.get(&node) {
+            Some(n.pred.len() + n.succ.len())
         } else {
             None
         }
@@ -247,24 +307,6 @@ impl<TNode, TEdge> Graph<TNode, TEdge> for AdjListGraph<TNode, TEdge> {
                             Box<Iterator<Item = &'a Self::TIndex> + 'a> {
         if let Some(n) = self.nodes.get(&node) {
             Box::new(n.pred.iter().chain(n.succ.iter()))
-        } else {
-            Box::new(::std::iter::empty())
-        }
-    }
-
-    fn get_pred_edges_of<'a>(&'a self, node: Self::TIndex) ->
-                            Box<Iterator<Item = &'a Self::TIndex> + 'a> {
-        if let Some(n) = self.nodes.get(&node) {
-            Box::new(n.pred.iter())
-        } else {
-            Box::new(::std::iter::empty())
-        }
-    }
-
-    fn get_succ_edges_of<'a>(&'a self, node: Self::TIndex) ->
-                            Box<Iterator<Item = &'a Self::TIndex> + 'a> {
-        if let Some(n) = self.nodes.get(&node) {
-            Box::new(n.succ.iter())
         } else {
             Box::new(::std::iter::empty())
         }
