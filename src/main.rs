@@ -20,7 +20,7 @@ use graph::Graph;
 
 
 // source: filepath to twitter data eg. "path/to/twitter_rv.net"
-fn _make_twitter_graph<G: Graph<u32, i32>>(source: &str, graph: &mut G) {
+fn create_indexgraph<G: Graph<u32, i32>>(source: &str, graph: &mut G) {
     let reader = BufReader::new(File::open(source).unwrap());
     let mut nodes: HashMap<u32, G::TIndex> = HashMap::new();
 
@@ -39,7 +39,7 @@ fn _make_twitter_graph<G: Graph<u32, i32>>(source: &str, graph: &mut G) {
     }
 }
 
-fn make_twitter_rcgraph(source: &str, graph: &mut rcgraph::RcGraph<u32, i32>) {
+fn create_rcgraph(source: &str, graph: &mut rcgraph::RcGraph<u32, i32>) {
     let reader = BufReader::new(File::open(source).unwrap());
     let mut nodes: HashMap<u32, Rc<RefCell<rcgraph::Node<u32, i32>>>>
         = HashMap::new();
@@ -59,7 +59,7 @@ fn make_twitter_rcgraph(source: &str, graph: &mut rcgraph::RcGraph<u32, i32>) {
     }
 }
 
-fn make_twitter_arenagraph<'a>(
+fn create_arenagraph<'a>(
     source: &str,
     graph: &'a mut arenagraph::ArenaGraph<'a, u32, u32>,
 ) {
@@ -88,42 +88,15 @@ fn make_twitter_arenagraph<'a>(
 }
 
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn rcgraph() {
-        let mut g = rcgraph::RcGraph::new();
-        make_twitter_rcgraph("twitter_500k.net", &mut g);
-        assert!(g.order() != 0);
-        assert!(g.size() != 0);
-    }
-
-    #[test]
-    fn arenagraph() {
-        let mut g = arenagraph::ArenaGraph::new();
-        make_twitter_arenagraph("twitter_500k.net", &mut g);
-        // assert!(g.order() != 0);
-        // assert!(g.size() != 0);
-    }
-
-    // #[test]
-    // fn idxgraph() {
-    //     let mut g = adjlistgraph::AdjListGraph::new();
-    //     make_twitter_graph("twitter_500k.net", &mut g);
-    //     assert!(g.order() != 0);
-    //     assert!(g.size() != 0);
-    // }
-}
-
-
 fn main() {
-    if let Some(arg1) = env::args().nth(1) {
+    if let Some(graph_path) = env::args().nth(1) {
         // let mut g = rcgraph::RcGraph::new();
+        // make_twitter_rcgraph(&graph_path, &mut g);
+
         let mut g = arenagraph::ArenaGraph::new();
-        make_twitter_arenagraph(&arg1, &mut g);
-        // assert!(g.order() != 0);
-        // assert!(g.size() != 0);
+        create_arenagraph(&graph_path, &mut g);
+
+        // let mut g = adjlistgraph::AdjListGraph::new();
+        // make_twitter_graph(&graph_path, &mut g);
     }
 }
