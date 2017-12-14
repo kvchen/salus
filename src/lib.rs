@@ -14,8 +14,6 @@ use std::rc::Rc;
 use std::cell::RefCell;
 
 use graph::Graph;
-use adjlistgraph::AdjListGraph;
-use rcgraph::RcGraph;
 
 
 // source: filepath to twitter data eg. "path/to/twitter_rv.net"
@@ -38,9 +36,10 @@ fn make_twitter_graph<G: Graph<u32, i32>>(source: &str, graph: &mut G) {
     }
 }
 
-fn make_twitter_rcgraph(source: &str, graph: &mut RcGraph<u32, i32>) {
+fn make_twitter_rcgraph(source: &str, graph: &mut rcgraph::RcGraph<u32, i32>) {
     let reader = BufReader::new(File::open(source).unwrap());
-    let mut nodes: HashMap<u32, Rc<RefCell<rcgraph::Node<u32, i32>>>> = HashMap::new();
+    let mut nodes: HashMap<u32, Rc<RefCell<rcgraph::Node<u32, i32>>>>
+        = HashMap::new();
 
     for readline in reader.lines() {
         let line = readline.ok().expect("read error");
@@ -57,6 +56,34 @@ fn make_twitter_rcgraph(source: &str, graph: &mut RcGraph<u32, i32>) {
     }
 }
 
+fn make_twitter_arenagraph<'a>(
+    source: &str,
+    graph: &'a mut arenagraph::ArenaGraph<'a, u32, u32>,
+) {
+	let reader = BufReader::new(File::open(source).unwrap());
+    let mut nodes: HashMap<u32, &arenagraph::Node<'a, u32, u32>>
+        = HashMap::new();
+
+    for readline in reader.lines() {
+        let line = readline.ok().expect("read error");
+        let elts: Vec<&str> = line[..].split_whitespace().collect();
+        let source_id: u32 = elts[0].parse().ok().expect("malformed src");
+        let target_id: u32 = elts[1].parse().ok().expect("malformed tgt");
+
+        if !nodes.contains_key(&source_id) {
+            nodes.insert(source_id, graph.add_node(source_id));
+        }
+        if !nodes.contains_key(&target_id) {
+            nodes.insert(target_id, graph.add_node(target_id));
+        }
+
+        let source_node = nodes.get(&source_id).unwrap();
+        let end_node = nodes.get(&target_id).unwrap();
+
+        graph.add_edge(source_node, end_node, 1);
+    }
+}
+
 
 #[cfg(test)]
 mod tests {
@@ -64,7 +91,7 @@ mod tests {
 
     #[test]
     fn rcgraph() {
-        let mut g = RcGraph::new();
+        let mut g = rcgraph::RcGraph::new();
         make_twitter_rcgraph("twitter_500.net", &mut g);
         assert!(g.order() != 0);
         assert!(g.size() != 0);
@@ -72,7 +99,7 @@ mod tests {
 
     #[test]
     fn idxgraph() {
-        let mut g = AdjListGraph::new();
+        let mut g = adjlistgraph::AdjListGraph::new();
         make_twitter_graph("twitter_500.net", &mut g);
         assert!(g.order() != 0);
         assert!(g.size() != 0);

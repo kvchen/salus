@@ -1,4 +1,3 @@
-
 use std::cell::UnsafeCell;
 use arena::TypedArena;
 
@@ -14,7 +13,7 @@ use arena::TypedArena;
 
 // 'a here indicates the lifetime of our Edge and its associated data.
 #[derive(Debug)]
-struct Edge<'a, TEdge: 'a, TNode: 'a> {
+pub struct Edge<'a, TEdge: 'a, TNode: 'a> {
     // Associated data for this edge
     data: TEdge,
 
@@ -43,7 +42,7 @@ impl<'a, TEdge, TNode> Edge<'a, TEdge, TNode> {
 // ============================================================================
 
 #[derive(Debug)]
-struct Node<'a, TNode: 'a, TEdge: 'a> {
+pub struct Node<'a, TNode: 'a, TEdge: 'a> {
     data: TNode,
 
     // This is a directed graph, so each node has predecessors and successors
@@ -82,7 +81,7 @@ impl<'a, TNode, TEdge> ArenaGraph<'a, TNode, TEdge> {
         }
     }
 
-    fn add_node(&'a mut self, data: TNode) -> &'a Node<'a, TNode, TEdge> {
+    pub fn add_node(&'a self, data: TNode) -> &'a Node<'a, TNode, TEdge> {
         Node::new(&self.nodes, data)
     }
 
@@ -94,8 +93,8 @@ impl<'a, TNode, TEdge> ArenaGraph<'a, TNode, TEdge> {
         unimplemented!();
     }
 
-    fn add_edge(
-        &'a mut self,
+    pub fn add_edge(
+        &'a self,
         start_node: &'a Node<'a, TNode, TEdge>,
         end_node: &'a Node<'a, TNode, TEdge>,
         data: TEdge
