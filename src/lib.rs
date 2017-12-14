@@ -1,5 +1,6 @@
 mod graph;
 mod adjlistgraph;
+mod rcgraph;
 
 use std::io::{BufRead, BufReader};
 use std::fs::File;
