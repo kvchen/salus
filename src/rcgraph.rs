@@ -5,7 +5,7 @@ use std::cell::RefCell;
 /*******************************************************************/
 
 #[derive(Debug)]
-struct Node<TNode, TEdge> {
+pub struct Node<TNode, TEdge> {
     // Associated data for this node
     data: TNode,
 
@@ -39,7 +39,7 @@ impl<TNode, TEdge> Node<TNode, TEdge> {
 /*******************************************************************/
 
 #[derive(Debug)]
-struct Edge<TEdge, TNode> {
+pub struct Edge<TEdge, TNode> {
     // Associated data for this edge
     data: TEdge,
 
@@ -95,19 +95,19 @@ impl<TNode, TEdge> RcGraph<TNode, TEdge> {
         }
     }
 
-    fn add_node(&mut self, data: TNode) -> Rc<RefCell<Node<TNode, TEdge>>> {
+    pub fn add_node(&mut self, data: TNode) -> Rc<RefCell<Node<TNode, TEdge>>> {
         let node_idx = Rc::new(RefCell::new(Node::new(data)));
         self.nodes.push(node_idx.clone());
         node_idx
     }
 
     // Removes node and all incident edges
-    fn remove_node(&mut self, node: Rc<RefCell<Node<TNode, TEdge>>>) -> Option<TNode> {
+    pub fn remove_node(&mut self, node: Rc<RefCell<Node<TNode, TEdge>>>) -> Option<TNode> {
         unimplemented!();
     }
 
     // Assumes given nodes exist...which is basically guaranteed
-    fn add_edge(&mut self, start_node: Rc<RefCell<Node<TNode, TEdge>>>, end_node: Rc<RefCell<Node<TNode, TEdge>>>, data: TEdge)
+    pub fn add_edge(&mut self, start_node: Rc<RefCell<Node<TNode, TEdge>>>, end_node: Rc<RefCell<Node<TNode, TEdge>>>, data: TEdge)
         -> Rc<RefCell<Edge<TEdge, TNode>>>
     {
         let edge_idx = Rc::new(RefCell::new(Edge::new(data, start_node.clone(), end_node.clone())));
@@ -118,40 +118,40 @@ impl<TNode, TEdge> RcGraph<TNode, TEdge> {
         edge_idx
     }
 
-    fn remove_edge(&mut self, edge: Rc<RefCell<Edge<TEdge, TNode>>>) -> Option<TEdge> {
+    pub fn remove_edge(&mut self, edge: Rc<RefCell<Edge<TEdge, TNode>>>) -> Option<TEdge> {
         unimplemented!();
     }
 
-    fn remove_edge_between(&mut self, node_a: Rc<RefCell<Node<TNode, TEdge>>>, node_b: Rc<RefCell<Node<TNode, TEdge>>>) -> Option<TEdge> {
+    pub fn remove_edge_between(&mut self, node_a: Rc<RefCell<Node<TNode, TEdge>>>, node_b: Rc<RefCell<Node<TNode, TEdge>>>) -> Option<TEdge> {
         unimplemented!();
     }
 
-    fn clear(&mut self) {
+    pub fn clear(&mut self) {
         self.nodes.clear();
         self.edges.clear();
     }
 
-    fn order(&self) -> usize {
+    pub fn order(&self) -> usize {
         self.nodes.len()
     }
 
-    fn size(&self) -> usize {
+    pub fn size(&self) -> usize {
         self.edges.len()
     }
 
-    fn get_node_data(&self, node: Rc<RefCell<Node<TNode, TEdge>>>) -> Option<&TNode> {
+    pub fn get_node_data(&self, node: Rc<RefCell<Node<TNode, TEdge>>>) -> Option<&TNode> {
         unimplemented!();
     }
 
-    fn get_edge_data(&self, edge: Rc<RefCell<Edge<TEdge, TNode>>>) -> Option<&TEdge> {
+    pub fn get_edge_data(&self, edge: Rc<RefCell<Edge<TEdge, TNode>>>) -> Option<&TEdge> {
         unimplemented!();
     }
 
-    fn nodes<'a>(&'a self) -> Box<Iterator<Item = &'a Rc<RefCell<Node<TNode, TEdge>>>> + 'a> {
+    pub fn nodes<'a>(&'a self) -> Box<Iterator<Item = &'a Rc<RefCell<Node<TNode, TEdge>>>> + 'a> {
         Box::new(self.nodes.iter())
     }
 
-    fn edges<'a>(&'a self) -> Box<Iterator<Item = &'a Rc<RefCell<Edge<TEdge, TNode>>>> + 'a> {
+    pub fn edges<'a>(&'a self) -> Box<Iterator<Item = &'a Rc<RefCell<Edge<TEdge, TNode>>>> + 'a> {
         Box::new(self.edges.iter())
     }
 }
