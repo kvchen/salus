@@ -9,6 +9,7 @@ mod adjlistgraph;
 mod arenagraph;
 mod rcgraph;
 
+use std::env;
 use std::io::{BufRead, BufReader};
 use std::fs::File;
 use std::collections::HashMap;
@@ -114,4 +115,15 @@ mod tests {
     //     assert!(g.order() != 0);
     //     assert!(g.size() != 0);
     // }
+}
+
+
+fn main() {
+    if let Some(arg1) = env::args().nth(1) {
+        // let mut g = rcgraph::RcGraph::new();
+        let mut g = arenagraph::ArenaGraph::new();
+        make_twitter_arenagraph(&arg1, &mut g);
+        // assert!(g.order() != 0);
+        // assert!(g.size() != 0);
+    }
 }
