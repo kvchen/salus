@@ -1,5 +1,10 @@
+#![feature(rustc_private)]
+
+extern crate arena;
+
 mod graph;
 mod adjlistgraph;
+mod arenagraph;
 
 use std::io::{BufRead, BufReader};
 use std::fs::File;
