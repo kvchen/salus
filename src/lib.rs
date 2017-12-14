@@ -14,7 +14,8 @@ use std::rc::Rc;
 use std::cell::RefCell;
 
 use graph::Graph;
-use rcgraph::{RcGraph, Node};
+use adjlistgraph::AdjListGraph;
+use rcgraph::RcGraph;
 
 
 // source: filepath to twitter data eg. "path/to/twitter_rv.net"
@@ -38,7 +39,7 @@ fn make_twitter_graph<G: Graph<u32, i32>>(source: &str, graph: &mut G) {
 }
 
 fn make_twitter_rcgraph(source: &str, graph: &mut RcGraph<u32, i32>) {
-	let reader = BufReader::new(File::open(source).unwrap());
+    let reader = BufReader::new(File::open(source).unwrap());
     let mut nodes: HashMap<u32, Rc<RefCell<rcgraph::Node<u32, i32>>>> = HashMap::new();
 
     for readline in reader.lines() {
@@ -59,7 +60,21 @@ fn make_twitter_rcgraph(source: &str, graph: &mut RcGraph<u32, i32>) {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+
     #[test]
-    fn it_works() {
+    fn rcgraph() {
+        let mut g = RcGraph::new();
+        make_twitter_rcgraph("twitter_500.net", &mut g);
+        assert!(g.order() != 0);
+        assert!(g.size() != 0);
+    }
+
+    #[test]
+    fn idxgraph() {
+        let mut g = AdjListGraph::new();
+        make_twitter_graph("twitter_500.net", &mut g);
+        assert!(g.order() != 0);
+        assert!(g.size() != 0);
     }
 }
