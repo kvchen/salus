@@ -5,6 +5,7 @@ extern crate arena;
 mod graph;
 mod adjlistgraph;
 mod arenagraph;
+mod rcgraph;
 
 use std::io::{BufRead, BufReader};
 use std::fs::File;
